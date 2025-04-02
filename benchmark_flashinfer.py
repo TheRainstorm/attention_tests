@@ -8,6 +8,12 @@ import flashinfer
 import flash_attn_interface  # fa3
 flash_attn_with_kvcache = flash_attn_interface.flash_attn_with_kvcache
 
+from utils import bench,bench_kineto
+
+def print_error(a, b):
+    print(f"MSE: {torch.nn.MSELoss()(a, b)}")
+    print(f"MAE: {torch.nn.L1Loss()(a, b)}")
+    
 def generate_block_kvcache(seqlen_k, page_size, batch_size, nheads_k, head_dim, device, dtype, no_rand=True):
     '''
     @Return
@@ -59,35 +65,30 @@ def convert_page_table(block_table, seqlens_k, page_size, device):
 
     return kv_indptr, kv_indices, kv_last_page_len
 
+'''
+fa3 不支持 Float8_e4m3fn
+'''
 @pytest.mark.parametrize("batch_size", [12, 17, 128])
 @pytest.mark.parametrize("kv_len", [54, 97, 512, 2048, 16384])
-# @pytest.mark.parametrize("page_size", [1, 8, 16])
-@pytest.mark.parametrize("page_size", [1256])
+@pytest.mark.parametrize("page_size", [256])
 @pytest.mark.parametrize("num_kv_heads", [4])
 @pytest.mark.parametrize("num_qo_heads", [4, 32])
 @pytest.mark.parametrize("head_dim", [128, 256])
-# @pytest.mark.parametrize("pos_encoding_mode", ["NONE", "ROPE_LLAMA"])
-# @pytest.mark.parametrize("logits_soft_cap", [0.0])
-# @pytest.mark.parametrize("return_lse", [True])
 @pytest.mark.parametrize("q_dtype", [torch.float16])
-@pytest.mark.parametrize("kv_dtype", [torch.float16, torch.float8_e4m3fn])
-# @pytest.mark.parametrize("contiguous_kv", [True])
+@pytest.mark.parametrize("kv_dtype", [torch.float16])
 def test_batch_decode_with_paged_kv_cache(
-    batch_size=12,
-    kv_len=2048,
-    page_size=256,
-    num_kv_heads=4,
-    num_qo_heads=32,
-    head_dim=128,
-    kv_layout='NHD',
-    pos_encoding_mode='NONE',
-    return_lse=False,
-    logits_soft_cap=0.0,
-    q_dtype=torch.float16,
-    kv_dtype=torch.float16,
-    contiguous_kv=True,
+    batch_size,
+    kv_len,
+    page_size,
+    num_kv_heads,
+    num_qo_heads,
+    head_dim,
+    q_dtype,
+    kv_dtype,
 ):
+    print(f'=== {batch_size=} {kv_len=} {head_dim=} {num_kv_heads=} {num_qo_heads=} {page_size=} {q_dtype=} {kv_dtype=}')
     device = "cuda:0"
+    
     q = torch.randn(batch_size, num_qo_heads, head_dim, device=device, dtype=q_dtype)
     q_fa = torch.unsqueeze(q, dim=1)
     
@@ -115,29 +116,32 @@ def test_batch_decode_with_paged_kv_cache(
     #     (batch_size,), (kv_len - 1) % page_size + 1, dtype=torch.int32, device="cuda:0"
     # )
     
-    o_fa_ = flash_attn_with_kvcache(
-        q_fa,
-        k_cache_paged,
-        v_cache_paged,
-        k=None,
-        v=None,
-        rotary_cos=None,
-        rotary_sin=None,
-        cache_seqlens=seqlens_k,
-        cache_batch_idx=None,
-        cache_leftpad=None,
-        # block_table=block_table,
-        page_table=block_table, # fa3 change to page_table
-        # causal=causal,
-        # window_size=window_size,
-        # rotary_interleaved=rotary_interleaved,
-        # alibi_slopes=alibi_slopes,
-        # num_splits=num_splits,
-    )
-    o_fa = torch.squeeze(o_fa_, dim=1)
+    def run_fa3():
+        o_fa_ = flash_attn_with_kvcache(
+            q_fa,
+            k_cache_paged,
+            v_cache_paged,
+            k=None,
+            v=None,
+            rotary_cos=None,
+            rotary_sin=None,
+            cache_seqlens=seqlens_k,
+            cache_batch_idx=None,
+            cache_leftpad=None,
+            # block_table=block_table,
+            page_table=block_table, # fa3 change to page_table
+            # causal=causal,
+            # window_size=window_size,
+            # rotary_interleaved=rotary_interleaved,
+            # alibi_slopes=alibi_slopes,
+            # num_splits=num_splits,
+        )
+        o_fa = torch.squeeze(o_fa_, dim=1)
+        return o_fa
+    o_fa = run_fa3()
     
     workspace_buffer = torch.empty(32 * 1024 * 1024, dtype=torch.int8, device="cuda:0")
-    wrapper = flashinfer.decode.BatchDecodeWithPagedKVCacheWrapper(workspace_buffer)
+    wrapper = flashinfer.decode.BatchDecodeWithPagedKVCacheWrapper(workspace_buffer, kv_layout='NHD')
     wrapper.plan(
         kv_indptr,
         kv_indices,
@@ -146,22 +150,28 @@ def test_batch_decode_with_paged_kv_cache(
         num_kv_heads,
         head_dim,
         page_size,
-        logits_soft_cap=logits_soft_cap,
-        pos_encoding_mode=pos_encoding_mode,
+        logits_soft_cap=0.0,
+        pos_encoding_mode='NONE',  # ROPE_LLAMA
         data_type=kv_dtype,
         q_data_type=q_dtype,
     )
-    o = wrapper.run(q, kv_data)
+    
+    def run_flashinfer():
+        o = wrapper.run(q, kv_data, return_lse=False)
+        return o
+    o = run_flashinfer()
     
     # np.savetxt('o_fa.txt', o_fa.cpu().flatten().numpy(), fmt='%.6f')
     # np.savetxt('o.txt', o.cpu().flatten().numpy(), fmt='%.6f')
     
-    def print_error(a, b):
-        print(f"MSE: {torch.nn.MSELoss()(a, b)}")
-        print(f"MAE: {torch.nn.L1Loss()(a, b)}")
-    print_error(o, o_fa)
+    # print_error(o, o_fa)
     torch.testing.assert_close(o.cpu(), o_fa.cpu(), rtol=1e-3, atol=1e-3)
-
+    
+    t1 = bench(run_fa3)
+    t2 = bench(run_flashinfer)
+    print(f'flash-attn-3: {t1}ms')
+    print(f'flashinfer: {t2}ms')
+    
 if __name__=="__main__":
     test_batch_decode_with_paged_kv_cache(
         batch_size=12,
