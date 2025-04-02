@@ -1,0 +1,811 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.11, pytest-8.3.5, pluggy-1.5.0
+rootdir: /home5/intern/fyyuan/workspace/attention_tests
+plugins: typeguard-4.3.0
+collected 288 items
+
+benchmark_flashinfer.py 
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.026105600595474242ms
+flashinfer          : 0.02316479980945587ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.029094401001930236ms
+flashinfer          : 0.021328000724315642ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.029203200340270997ms
+flashinfer          : 0.0231904000043869ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08196160197257996ms
+flashinfer          : 0.03129920065402984ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.022940799593925476ms
+flashinfer          : 0.01839359998703003ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08828160166740417ms
+flashinfer          : 0.02967039942741394ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16165440082550048ms
+flashinfer          : 0.04822399914264679ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.1625856399536132ms
+flashinfer          : 0.29823999404907225ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.048198398947715757ms
+flashinfer          : 0.02036159932613373ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5394656181335449ms
+flashinfer          : 0.1640768051147461ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0519071578979493ms
+flashinfer          : 0.3175071954727173ms
+.sssssssssssss
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.023683199286460878ms
+flashinfer          : 0.018367999792099ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.031004801392555237ms
+flashinfer          : 0.022115199267864226ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.031164801120758055ms
+flashinfer          : 0.021062399446964263ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08214399814605713ms
+flashinfer          : 0.06991040110588073ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02451840043067932ms
+flashinfer          : 0.019871999323368073ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08754879832267762ms
+flashinfer          : 0.07239999771118164ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16128959655761718ms
+flashinfer          : 0.13471360206604005ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.1604063987731934ms
+flashinfer          : 0.9947744369506836ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.048630398511886594ms
+flashinfer          : 0.03489600121974945ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.539788818359375ms
+flashinfer          : 0.4934016227722168ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0527039527893067ms
+flashinfer          : 0.9816543579101562ms
+.s
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.023756800591945647ms
+flashinfer          : 0.019020800292491914ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04711999893188477ms
+flashinfer          : 0.020019200444221497ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10982400178909302ms
+flashinfer          : 0.029712000489234926ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.7749887943267822ms
+flashinfer          : 0.1553984045982361ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04831039905548096ms
+flashinfer          : 0.01879040002822876ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5392384052276611ms
+flashinfer          : 0.16435519456863404ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.053171157836914ms
+flashinfer          : 0.3214272022247314ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 8.211849975585938ms
+flashinfer          : 2.474928092956543ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.3329472064971924ms
+flashinfer          : 0.08262720108032226ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 4.027353668212891ms
+flashinfer          : 1.12925443649292ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 8.108502197265626ms
+flashinfer          : 2.2341440200805662ms
+.s
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.022291199862957002ms
+flashinfer          : 0.018028800189495087ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.028464001417160035ms
+flashinfer          : 0.021532799303531646ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.028489598631858827ms
+flashinfer          : 0.021667200326919555ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08282560110092163ms
+flashinfer          : 0.031481599807739256ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02295680046081543ms
+flashinfer          : 0.018028800189495087ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08877440094947815ms
+flashinfer          : 0.030099201202392577ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16332800388336183ms
+flashinfer          : 0.047891199588775635ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.1627008438110351ms
+flashinfer          : 0.29850239753723146ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04811840057373047ms
+flashinfer          : 0.018905599415302277ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5390528202056885ms
+flashinfer          : 0.16476160287857056ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.053212833404541ms
+flashinfer          : 0.31709439754486085ms
+.sssssssssssss
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.023299199342727662ms
+flashinfer          : 0.018940800428390504ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.029440000653266907ms
+flashinfer          : 0.021452799439430237ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.028275200724601747ms
+flashinfer          : 0.020284800231456755ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08161600232124329ms
+flashinfer          : 0.06905919909477234ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.024966399371623992ms
+flashinfer          : 0.018335999548435213ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08751360177993775ms
+flashinfer          : 0.07185599803924561ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16126079559326173ms
+flashinfer          : 0.13493119478225707ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.1622336387634278ms
+flashinfer          : 0.9992832183837891ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04872640073299408ms
+flashinfer          : 0.0350271999835968ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5400703907012939ms
+flashinfer          : 0.4949215888977051ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.053705596923828ms
+flashinfer          : 0.9845600128173828ms
+.s
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02324800044298172ms
+flashinfer          : 0.01820479929447174ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04725759923458099ms
+flashinfer          : 0.019519999623298645ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.11000959873199463ms
+flashinfer          : 0.02895039916038513ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.7747392177581787ms
+flashinfer          : 0.15459519624710083ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.0481440007686615ms
+flashinfer          : 0.01875839978456497ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5386208057403564ms
+flashinfer          : 0.1622912049293518ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0531935691833496ms
+flashinfer          : 0.3164128065109253ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 8.154316711425782ms
+flashinfer          : 2.505695915222168ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.3314208030700684ms
+flashinfer          : 0.08234559893608093ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 4.027692794799805ms
+flashinfer          : 1.1228832244873046ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 8.109776306152344ms
+flashinfer          : 2.238147163391113ms
+.s
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.022771200537681578ms
+flashinfer          : 0.01797440052032471ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02877120077610016ms
+flashinfer          : 0.020662400126457214ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.028591999411582948ms
+flashinfer          : 0.020604799687862396ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08235200047492981ms
+flashinfer          : 0.029206401109695433ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02221119999885559ms
+flashinfer          : 0.018387199938297273ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08890560269355774ms
+flashinfer          : 0.02802560031414032ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16294080018997192ms
+flashinfer          : 0.04776000082492828ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.1717439651489259ms
+flashinfer          : 0.29723200798034666ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.048809599876403806ms
+flashinfer          : 0.020393599569797517ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5438079833984375ms
+flashinfer          : 0.15989439487457274ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0617119789123535ms
+flashinfer          : 0.3106719970703125ms
+.sssssssssssss
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.022412799298763275ms
+flashinfer          : 0.018585599958896637ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02873600125312805ms
+flashinfer          : 0.02089280039072037ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02961919903755188ms
+flashinfer          : 0.021254399418830873ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.08263999819755555ms
+flashinfer          : 0.07424960136413575ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.023321600258350374ms
+flashinfer          : 0.018646399676799773ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.0883840024471283ms
+flashinfer          : 0.07348480224609374ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16257280111312866ms
+flashinfer          : 0.13618240356445313ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.1621024131774902ms
+flashinfer          : 1.0011327743530274ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04915199875831604ms
+flashinfer          : 0.034995201230049136ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5401887893676758ms
+flashinfer          : 0.49300479888916016ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0540351867675781ms
+flashinfer          : 0.9804927825927734ms
+.s
+=== batch_size=1    kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02282239943742752ms
+flashinfer          : 0.019472000002861024ms
+.
+=== batch_size=1    kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.047193598747253415ms
+flashinfer          : 0.02034880071878433ms
+.
+=== batch_size=1    kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10985920429229737ms
+flashinfer          : 0.02802560031414032ms
+.
+=== batch_size=1    kv_len=32000 head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.775491189956665ms
+flashinfer          : 0.15399359464645385ms
+.
+=== batch_size=16   kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.04831359982490539ms
+flashinfer          : 0.02129279971122742ms
+.
+=== batch_size=16   kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.5388000011444092ms
+flashinfer          : 0.16010240316390992ms
+.
+=== batch_size=16   kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0517312049865724ms
+flashinfer          : 0.3142047882080078ms
+.
+=== batch_size=16   kv_len=32000 head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 8.162857818603516ms
+flashinfer          : 2.4481760025024415ms
+.
+=== batch_size=128  kv_len=128   head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.33277440071105957ms
+flashinfer          : 0.08112639784812928ms
+.
+=== batch_size=128  kv_len=2000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 4.059532928466797ms
+flashinfer          : 1.1243136405944825ms
+.
+=== batch_size=128  kv_len=4000  head_dim=128  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 8.076073455810548ms
+flashinfer          : 2.2354368209838866ms
+.s
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02260800004005432ms
+flashinfer          : 0.01850239932537079ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.026815998554229736ms
+flashinfer          : 0.021491199731826782ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.03086400032043457ms
+flashinfer          : 0.02114879935979843ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.1569823980331421ms
+flashinfer          : 0.050387197732925416ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.021254399418830873ms
+flashinfer          : 0.018243199586868285ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16892800331115723ms
+flashinfer          : 0.04677119851112366ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.3066335916519165ms
+flashinfer          : 0.0827072024345398ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.3154239654541016ms
+flashinfer          : 0.5810751914978027ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10094720125198364ms
+flashinfer          : 0.02773759961128235ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0296416282653809ms
+flashinfer          : 0.34533441066741943ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0309471130371093ms
+flashinfer          : 0.6873951911926269ms
+.sssssssssssss
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.022918400168418885ms
+flashinfer          : 0.018534399569034576ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.027535998821258546ms
+flashinfer          : 0.02024320065975189ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.030371201038360596ms
+flashinfer          : 0.026742398738861084ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.15564160346984862ms
+flashinfer          : 0.13332799673080445ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02250880002975464ms
+flashinfer          : 0.01924159973859787ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.1672127962112427ms
+flashinfer          : 0.1566848039627075ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.3079807996749878ms
+flashinfer          : 0.30075840950012206ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.3173696517944338ms
+flashinfer          : 2.33831672668457ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10181759595870972ms
+flashinfer          : 0.069651198387146ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0289183616638184ms
+flashinfer          : 1.002086353302002ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.033407974243164ms
+flashinfer          : 2.0001504898071287ms
+.s
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.021673600375652313ms
+flashinfer          : 0.019011199474334717ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10864959955215454ms
+flashinfer          : 0.028655999898910524ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.20654399394989015ms
+flashinfer          : 0.04736000001430511ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.5442720413208009ms
+flashinfer          : 0.29673919677734373ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10094079971313477ms
+flashinfer          : 0.02738879919052124ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0286815643310547ms
+flashinfer          : 0.3555392026901245ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0315967559814454ms
+flashinfer          : 0.6994143962860108ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 16.215802001953126ms
+flashinfer          : 5.520560073852539ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.7116000175476074ms
+flashinfer          : 0.15365760326385497ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 7.8404899597167965ms
+flashinfer          : 2.236854362487793ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=8    q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 15.484976196289063ms
+flashinfer          : 4.449638366699219ms
+.s
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.021558399498462676ms
+flashinfer          : 0.01855359971523285ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.026921600103378296ms
+flashinfer          : 0.021184000372886657ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.030921599268913268ms
+flashinfer          : 0.02078080028295517ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.15687040090560914ms
+flashinfer          : 0.04947839975357056ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.020559999346733093ms
+flashinfer          : 0.018086400628089905ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.1682144045829773ms
+flashinfer          : 0.04694080054759979ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.30877759456634524ms
+flashinfer          : 0.08268799781799316ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.3201919555664063ms
+flashinfer          : 0.5846240043640136ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10164480209350586ms
+flashinfer          : 0.02778880000114441ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0294143676757812ms
+flashinfer          : 0.3471328020095825ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0318271636962892ms
+flashinfer          : 0.7096447944641113ms
+.sssssssssssss
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.022249600291252135ms
+flashinfer          : 0.018035200238227845ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.028412801027297974ms
+flashinfer          : 0.01961600035429001ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.030428799986839294ms
+flashinfer          : 0.02686080038547516ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.15575040578842164ms
+flashinfer          : 0.1339359998703003ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.023552000522613525ms
+flashinfer          : 0.01903039962053299ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16696319580078126ms
+flashinfer          : 0.15938559770584107ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.3078943967819214ms
+flashinfer          : 0.30256640911102295ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.317068862915039ms
+flashinfer          : 2.3374624252319336ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10164480209350586ms
+flashinfer          : 0.06980800032615661ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0292863845825195ms
+flashinfer          : 1.0038911819458007ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0330783843994142ms
+flashinfer          : 1.998601531982422ms
+.s
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.021110400557518005ms
+flashinfer          : 0.018012799322605133ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10880639553070068ms
+flashinfer          : 0.02903040051460266ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.20630080699920655ms
+flashinfer          : 0.04655680060386658ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.543283176422119ms
+flashinfer          : 0.2946367979049683ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10088319778442383ms
+flashinfer          : 0.02693440020084381ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0281248092651367ms
+flashinfer          : 0.35018560886383054ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0326976776123047ms
+flashinfer          : 0.7031455993652344ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 16.23259582519531ms
+flashinfer          : 5.577257537841797ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.7116000175476074ms
+flashinfer          : 0.1522112011909485ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 7.985411071777344ms
+flashinfer          : 2.2216512680053713ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=16   q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 15.486207580566406ms
+flashinfer          : 4.445606231689453ms
+.s
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.021491199731826782ms
+flashinfer          : 0.019075199961662292ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.028799998760223388ms
+flashinfer          : 0.021667200326919555ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.030972799658775328ms
+flashinfer          : 0.022697600722312927ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.15667840242385864ms
+flashinfer          : 0.047670400142669676ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02133760005235672ms
+flashinfer          : 0.019289599359035493ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.1684224009513855ms
+flashinfer          : 0.04636160135269165ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.30845439434051514ms
+flashinfer          : 0.084060800075531ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.3316671371459963ms
+flashinfer          : 0.5870207786560059ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10202560424804688ms
+flashinfer          : 0.02653439939022064ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0308159828186034ms
+flashinfer          : 0.3522047996520996ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=4    page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0296192169189453ms
+flashinfer          : 0.6998367786407471ms
+.sssssssssssss
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02240000069141388ms
+flashinfer          : 0.01727679967880249ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02863360047340393ms
+flashinfer          : 0.028748801350593566ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.030374398827552794ms
+flashinfer          : 0.029238399863243104ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.15528639554977416ms
+flashinfer          : 0.16002880334854125ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.023046399652957916ms
+flashinfer          : 0.020640000700950623ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.16739840507507325ms
+flashinfer          : 0.15826879739761351ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.30690560340881345ms
+flashinfer          : 0.3060415983200073ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.3143199920654296ms
+flashinfer          : 2.3873151779174804ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10197759866714477ms
+flashinfer          : 0.06963199973106385ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0276736259460448ms
+flashinfer          : 1.0010016441345215ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=4    num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.03125114440918ms
+flashinfer          : 1.9964160919189453ms
+.s
+=== batch_size=1    kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.02213120013475418ms
+flashinfer          : 0.01810240000486374ms
+.
+=== batch_size=1    kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10877759456634521ms
+flashinfer          : 0.02773120105266571ms
+.
+=== batch_size=1    kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.20592639446258545ms
+flashinfer          : 0.04596799910068512ms
+.
+=== batch_size=1    kv_len=32000 head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.5405664443969727ms
+flashinfer          : 0.2968384027481079ms
+.
+=== batch_size=16   kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.10053119659423829ms
+flashinfer          : 0.02389120012521744ms
+.
+=== batch_size=16   kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 1.0277440071105957ms
+flashinfer          : 0.34978880882263186ms
+.
+=== batch_size=16   kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 2.0299039840698243ms
+flashinfer          : 0.6860256195068359ms
+.
+=== batch_size=16   kv_len=32000 head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 16.198463439941406ms
+flashinfer          : 5.415692901611328ms
+.
+=== batch_size=128  kv_len=128   head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 0.7112768173217774ms
+flashinfer          : 0.1514847993850708ms
+.
+=== batch_size=128  kv_len=2000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 7.840627288818359ms
+flashinfer          : 2.218953514099121ms
+.
+=== batch_size=128  kv_len=4000  head_dim=256  num_kv_heads=32   num_qo_heads=32   page_size=256  q_dtype=torch.float16 kv_dtype=torch.float16 no_rand=False
+flash-attn-3        : 15.473910522460937ms
+flashinfer          : 4.420095825195313ms
+.s
+
+=============================== warnings summary ===============================
+benchmark_flashinfer.py::test_batch_decode_with_paged_kv_cache[False-kv_dtype0-q_dtype0-128-8-4-4-1-128]
+benchmark_flashinfer.py::test_batch_decode_with_paged_kv_cache[False-kv_dtype0-q_dtype0-128-8-4-4-1-128]
+benchmark_flashinfer.py::test_batch_decode_with_paged_kv_cache[False-kv_dtype0-q_dtype0-256-8-4-4-1-128]
+benchmark_flashinfer.py::test_batch_decode_with_paged_kv_cache[False-kv_dtype0-q_dtype0-256-8-4-4-1-128]
+  /home4/intern/fyyuan/miniconda3/envs/tcu12/lib/python3.11/site-packages/torch/utils/cpp_extension.py:2059: UserWarning: TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
+  If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'].
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 198 passed, 90 skipped, 4 warnings in 40.23s =================

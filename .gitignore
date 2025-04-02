@@ -4,3 +4,4 @@ __pycache__
 
 .vscode
 *.log
+!benchmark_flashinfer_h20_cuda12.4.log

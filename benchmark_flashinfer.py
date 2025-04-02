@@ -18,7 +18,6 @@ def generate_block_kvcache(seqlen_k, page_size, batch_size, nheads_k, head_dim, 
     '''
     @Return
         block_table: (batch_size, seqlen_k / page_size)
-        
     '''
     num_blocks = math.ceil(seqlen_k / page_size) * batch_size
     # kv_data
@@ -68,14 +67,15 @@ def convert_page_table(block_table, seqlens_k, page_size, device):
 '''
 fa3 不支持 Float8_e4m3fn
 '''
-@pytest.mark.parametrize("batch_size", [12, 17, 128])
-@pytest.mark.parametrize("kv_len", [54, 97, 512, 2048, 16384])
-@pytest.mark.parametrize("page_size", [256])
-@pytest.mark.parametrize("num_kv_heads", [4])
+@pytest.mark.parametrize("kv_len", [128, 2000, 4000, 32000])
+@pytest.mark.parametrize("batch_size", [1, 16, 128])
+@pytest.mark.parametrize("num_kv_heads", [4, 32])
 @pytest.mark.parametrize("num_qo_heads", [4, 32])
+@pytest.mark.parametrize("page_size", [8, 16, 256])
 @pytest.mark.parametrize("head_dim", [128, 256])
 @pytest.mark.parametrize("q_dtype", [torch.float16])
 @pytest.mark.parametrize("kv_dtype", [torch.float16])
+@pytest.mark.parametrize("no_rand", [False])
 def test_batch_decode_with_paged_kv_cache(
     batch_size,
     kv_len,
@@ -85,9 +85,15 @@ def test_batch_decode_with_paged_kv_cache(
     head_dim,
     q_dtype,
     kv_dtype,
+    no_rand  # 生成 pagetable 时，是否打乱
 ):
-    print(f'=== {batch_size=} {kv_len=} {head_dim=} {num_kv_heads=} {num_qo_heads=} {page_size=} {q_dtype=} {kv_dtype=}')
+    if kv_len==32000 and batch_size>=128:
+        pytest.skip("OOM")
+    if num_qo_heads < num_kv_heads:
+        pytest.skip("num_qo_heads should >= num_kv_heads")
+    print(f'\n=== {batch_size=:<4d} {kv_len=:<5d} {head_dim=:<4d} {num_kv_heads=:<4d} {num_qo_heads=:<4d} {page_size=:<4d} {q_dtype=} {kv_dtype=} {no_rand=}')
     device = "cuda:0"
+    torch.manual_seed(42)
     
     q = torch.randn(batch_size, num_qo_heads, head_dim, device=device, dtype=q_dtype)
     q_fa = torch.unsqueeze(q, dim=1)
@@ -97,7 +103,7 @@ def test_batch_decode_with_paged_kv_cache(
     
     # flash-attention
     k_cache_paged, v_cache_paged, block_table, seqlens_k = generate_block_kvcache(
-        kv_len, page_size, batch_size, num_kv_heads, head_dim, device, kv_dtype
+        kv_len, page_size, batch_size, num_kv_heads, head_dim, device, kv_dtype, no_rand
     )
     
     # flashinfer
@@ -167,10 +173,10 @@ def test_batch_decode_with_paged_kv_cache(
     # print_error(o, o_fa)
     torch.testing.assert_close(o.cpu(), o_fa.cpu(), rtol=1e-3, atol=1e-3)
     
-    t1 = bench(run_fa3)
     t2 = bench(run_flashinfer)
-    print(f'flash-attn-3: {t1}ms')
-    print(f'flashinfer: {t2}ms')
+    t1 = bench(run_fa3)
+    print(f'{"flash-attn-3":20}: {t1}ms')
+    print(f'{"flashinfer":20}: {t2}ms')
     
 if __name__=="__main__":
     test_batch_decode_with_paged_kv_cache(

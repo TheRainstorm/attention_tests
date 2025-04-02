@@ -1,3 +1,4 @@
+# copy from DeepGEMM
 import os
 import sys
 import torch
@@ -5,21 +6,23 @@ import torch.distributed as dist
 
 
 def bench(fn, num_warmups: int = 5, num_tests: int = 10,
-          high_precision: bool = False):
-    # Flush L2 cache with 256 MB data
-    torch.cuda.synchronize()
-    cache = torch.empty(int(256e6 // 4), dtype=torch.int, device='cuda')
-    cache.zero_()
+          high_precision: bool = False, flash_l2: bool = True, elim_cpu_ovhd: bool = True):
+    if flash_l2:
+        # Flush L2 cache with 256 MB data
+        torch.cuda.synchronize()
+        cache = torch.empty(int(256e6 // 4), dtype=torch.int, device='cuda')
+        cache.zero_()
 
     # Warmup
     for _ in range(num_warmups):
         fn()
 
-    # Add a large kernel to eliminate the CPU launch overhead
-    if high_precision:
-        x = torch.randn((8192, 8192), dtype=torch.float, device='cuda')
-        y = torch.randn((8192, 8192), dtype=torch.float, device='cuda')
-        x @ y
+    if elim_cpu_ovhd:
+        # Add a large kernel to eliminate the CPU launch overhead
+        if high_precision:
+            x = torch.randn((8192, 8192), dtype=torch.float, device='cuda')
+            y = torch.randn((8192, 8192), dtype=torch.float, device='cuda')
+            x @ y
 
     # Testing
     start_event = torch.cuda.Event(enable_timing=True)
