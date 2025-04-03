@@ -69,13 +69,17 @@ fa3 不支持 Float8_e4m3fn
 '''
 @pytest.mark.parametrize("kv_len", [128, 2000, 4000, 32000])
 @pytest.mark.parametrize("batch_size", [1, 16, 128])
-@pytest.mark.parametrize("num_kv_heads", [4, 32])
-@pytest.mark.parametrize("num_qo_heads", [4, 32])
+# @pytest.mark.parametrize("batch_size", [1, 20, 70, 140, 500])
+# @pytest.mark.parametrize("num_kv_heads", [8])
+# @pytest.mark.parametrize("num_qo_heads", [64])
+@pytest.mark.parametrize("num_kv_heads", [4])
+@pytest.mark.parametrize("num_qo_heads", [32])
 @pytest.mark.parametrize("page_size", [8, 16, 256])
-@pytest.mark.parametrize("head_dim", [128, 256])
+@pytest.mark.parametrize("head_dim", [128])
 @pytest.mark.parametrize("q_dtype", [torch.float16])
 @pytest.mark.parametrize("kv_dtype", [torch.float16])
 @pytest.mark.parametrize("no_rand", [False])
+@pytest.mark.parametrize("use_tensor_cores", [False, True])
 def test_batch_decode_with_paged_kv_cache(
     batch_size,
     kv_len,
@@ -85,13 +89,14 @@ def test_batch_decode_with_paged_kv_cache(
     head_dim,
     q_dtype,
     kv_dtype,
-    no_rand  # 生成 pagetable 时，是否打乱
+    no_rand,  # 生成 pagetable 时，是否打乱
+    use_tensor_cores   # in fact, this option make flashinfer use prefill function
 ):
     if kv_len==32000 and batch_size>=128:
         pytest.skip("OOM")
     if num_qo_heads < num_kv_heads:
         pytest.skip("num_qo_heads should >= num_kv_heads")
-    print(f'\n=== {batch_size=:<4d} {kv_len=:<5d} {head_dim=:<4d} {num_kv_heads=:<4d} {num_qo_heads=:<4d} {page_size=:<4d} {q_dtype=} {kv_dtype=} {no_rand=}')
+    print(f'\n=== {batch_size=:<4d} {kv_len=:<5d} {head_dim=:<4d} {num_kv_heads=:<4d} {num_qo_heads=:<4d} {page_size=:<4d} {use_tensor_cores=} {q_dtype=} {kv_dtype=}')
     device = "cuda:0"
     torch.manual_seed(42)
     
@@ -147,7 +152,7 @@ def test_batch_decode_with_paged_kv_cache(
     o_fa = run_fa3()
     
     workspace_buffer = torch.empty(32 * 1024 * 1024, dtype=torch.int8, device="cuda:0")
-    wrapper = flashinfer.decode.BatchDecodeWithPagedKVCacheWrapper(workspace_buffer, kv_layout='NHD')
+    wrapper = flashinfer.decode.BatchDecodeWithPagedKVCacheWrapper(workspace_buffer, kv_layout='NHD', use_tensor_cores=use_tensor_cores)
     wrapper.plan(
         kv_indptr,
         kv_indices,
@@ -189,5 +194,7 @@ if __name__=="__main__":
         num_qo_heads=32,
         head_dim=128,
         q_dtype=torch.float16,
-        kv_dtype=torch.float16
+        kv_dtype=torch.float16,
+        no_rand=False,
+        use_tensor_cores=True
     )
