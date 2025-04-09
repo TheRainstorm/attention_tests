@@ -5,8 +5,7 @@ import math
 import pytest
 import flashinfer
 
-import flash_attn_interface  # fa3
-flash_attn_with_kvcache = flash_attn_interface.flash_attn_with_kvcache
+from flash_attn_interface import flash_attn_with_kvcache, get_scheduler_metadata
 
 from utils import bench,bench_kineto
 
@@ -74,12 +73,13 @@ fa3 不支持 Float8_e4m3fn
 # @pytest.mark.parametrize("num_qo_heads", [64])
 @pytest.mark.parametrize("num_kv_heads", [4])
 @pytest.mark.parametrize("num_qo_heads", [32])
-@pytest.mark.parametrize("page_size", [8, 16, 256])
+@pytest.mark.parametrize("page_size", [8, 16, 64, 128, 256])
 @pytest.mark.parametrize("head_dim", [128])
 @pytest.mark.parametrize("q_dtype", [torch.float16])
 @pytest.mark.parametrize("kv_dtype", [torch.float16])
 @pytest.mark.parametrize("no_rand", [False])
 @pytest.mark.parametrize("use_tensor_cores", [False, True])
+@pytest.mark.parametrize("run_bench", [True])
 def test_batch_decode_with_paged_kv_cache(
     batch_size,
     kv_len,
@@ -90,7 +90,8 @@ def test_batch_decode_with_paged_kv_cache(
     q_dtype,
     kv_dtype,
     no_rand,  # 生成 pagetable 时，是否打乱
-    use_tensor_cores   # in fact, this option make flashinfer use prefill function
+    use_tensor_cores,   # in fact, this option make flashinfer use prefill function
+    run_bench
 ):
     if kv_len==32000 and batch_size>=128:
         pytest.skip("OOM")
@@ -127,6 +128,10 @@ def test_batch_decode_with_paged_kv_cache(
     #     (batch_size,), (kv_len - 1) % page_size + 1, dtype=torch.int32, device="cuda:0"
     # )
     
+    scheduler_metadata = get_scheduler_metadata(
+        batch_size, 1, kv_len, num_qo_heads, num_kv_heads, head_dim,
+        seqlens_k, q_dtype, headdim_v=head_dim, page_size=page_size, causal=False
+    )
     def run_fa3():
         o_fa_ = flash_attn_with_kvcache(
             q_fa,
@@ -146,6 +151,7 @@ def test_batch_decode_with_paged_kv_cache(
             # rotary_interleaved=rotary_interleaved,
             # alibi_slopes=alibi_slopes,
             # num_splits=num_splits,
+            scheduler_metadata=scheduler_metadata
         )
         o_fa = torch.squeeze(o_fa_, dim=1)
         return o_fa
@@ -178,23 +184,25 @@ def test_batch_decode_with_paged_kv_cache(
     # print_error(o, o_fa)
     torch.testing.assert_close(o.cpu(), o_fa.cpu(), rtol=1e-3, atol=1e-3)
     
-    t2 = bench(run_flashinfer)
-    t1 = bench(run_fa3)
-    print(f'{"flash-attn-3":20}: {t1}ms')
-    print(f'{"flashinfer":20}: {t2}ms')
+    if run_bench:
+        t2 = bench(run_flashinfer)
+        t1 = bench(run_fa3)
+        print(f'{"flash-attn-3":20}: {t1}ms')
+        print(f'{"flashinfer":20}: {t2}ms')
     
 if __name__=="__main__":
     test_batch_decode_with_paged_kv_cache(
-        batch_size=12,
+        batch_size=16,
         # kv_len=54,
-        kv_len=2048,
+        kv_len=32000,
         # page_size=1,
-        page_size=256,
+        page_size=8,
         num_kv_heads=4,
         num_qo_heads=32,
         head_dim=128,
         q_dtype=torch.float16,
         kv_dtype=torch.float16,
         no_rand=False,
-        use_tensor_cores=True
+        use_tensor_cores=False,
+        run_bench=False
     )
