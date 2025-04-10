@@ -66,19 +66,18 @@ def convert_page_table(block_table, seqlens_k, page_size, device):
 '''
 fa3 不支持 Float8_e4m3fn
 '''
-@pytest.mark.parametrize("kv_len", [128, 2000, 4000, 32000])
-@pytest.mark.parametrize("batch_size", [1, 16, 128])
+# @pytest.mark.parametrize("kv_len", [128, 2000, 4000, 32000])
+@pytest.mark.parametrize("kv_len", [1024, 2048, 4096, 8192, 16384])
 # @pytest.mark.parametrize("batch_size", [1, 20, 70, 140, 500])
-# @pytest.mark.parametrize("num_kv_heads", [8])
-# @pytest.mark.parametrize("num_qo_heads", [64])
-@pytest.mark.parametrize("num_kv_heads", [4])
-@pytest.mark.parametrize("num_qo_heads", [32])
-@pytest.mark.parametrize("page_size", [8, 16, 64, 128, 256])
+@pytest.mark.parametrize("batch_size", [128])
+@pytest.mark.parametrize("num_kv_heads", [16])
+@pytest.mark.parametrize("num_qo_heads", [128])
+@pytest.mark.parametrize("page_size", [128])
 @pytest.mark.parametrize("head_dim", [128])
 @pytest.mark.parametrize("q_dtype", [torch.float16])
 @pytest.mark.parametrize("kv_dtype", [torch.float16])
 @pytest.mark.parametrize("no_rand", [False])
-@pytest.mark.parametrize("use_tensor_cores", [False, True])
+@pytest.mark.parametrize("use_tensor_cores", [True, False])
 @pytest.mark.parametrize("run_bench", [True])
 def test_batch_decode_with_paged_kv_cache(
     batch_size,
@@ -93,45 +92,48 @@ def test_batch_decode_with_paged_kv_cache(
     use_tensor_cores,   # in fact, this option make flashinfer use prefill function
     run_bench
 ):
-    if kv_len==32000 and batch_size>=128:
-        pytest.skip("OOM")
     if num_qo_heads < num_kv_heads:
         pytest.skip("num_qo_heads should >= num_kv_heads")
     print(f'\n=== {batch_size=:<4d} {kv_len=:<5d} {head_dim=:<4d} {num_kv_heads=:<4d} {num_qo_heads=:<4d} {page_size=:<4d} {use_tensor_cores=} {q_dtype=} {kv_dtype=}')
     device = "cuda:0"
     torch.manual_seed(42)
     
-    q = torch.randn(batch_size, num_qo_heads, head_dim, device=device, dtype=q_dtype)
-    q_fa = torch.unsqueeze(q, dim=1)
+    try:
+        q = torch.randn(batch_size, num_qo_heads, head_dim, device=device, dtype=q_dtype)
+        q_fa = torch.unsqueeze(q, dim=1)
+        
+        num_pages_per_seq = (kv_len + page_size - 1) // page_size
+        total_num_pages = num_pages_per_seq * batch_size
+        
+        # flash-attention
+        k_cache_paged, v_cache_paged, block_table, seqlens_k = generate_block_kvcache(
+            kv_len, page_size, batch_size, num_kv_heads, head_dim, device, kv_dtype, no_rand
+        )
     
-    num_pages_per_seq = (kv_len + page_size - 1) // page_size
-    total_num_pages = num_pages_per_seq * batch_size
+        # flashinfer
+        kv_data = torch.stack((k_cache_paged, v_cache_paged), dim=1)
     
-    # flash-attention
-    k_cache_paged, v_cache_paged, block_table, seqlens_k = generate_block_kvcache(
-        kv_len, page_size, batch_size, num_kv_heads, head_dim, device, kv_dtype, no_rand
-    )
-    
-    # flashinfer
-    kv_data = torch.stack((k_cache_paged, v_cache_paged), dim=1)
-    # kv_shape = [total_num_pages, 2, page_size, num_kv_heads, head_dim]  # NHD
-    # kv_data_fp32 = torch.randn(*kv_shape, dtype=torch.float32, device="cuda:0")
-    # kv_data = kv_data_fp32.to(kv_dtype)
-    kv_indptr, kv_indices, kv_last_page_len = convert_page_table(block_table, seqlens_k, page_size, device)
-    # # 这里构造了一个最简单情况，所有请求有 kv_len/page_size 个 page，page 索引按序递增。
-    # kv_indptr = (
-    #     torch.arange(0, batch_size + 1, device="cuda:0", dtype=torch.int32)
-    #     * num_pages_per_seq
-    # )
-    # kv_indices = torch.arange(0, total_num_pages, device="cuda:0", dtype=torch.int32)
-    # kv_last_page_len = torch.full(
-    #     (batch_size,), (kv_len - 1) % page_size + 1, dtype=torch.int32, device="cuda:0"
-    # )
+        # kv_shape = [total_num_pages, 2, page_size, num_kv_heads, head_dim]  # NHD
+        # kv_data_fp32 = torch.randn(*kv_shape, dtype=torch.float32, device="cuda:0")
+        # kv_data = kv_data_fp32.to(kv_dtype)
+        kv_indptr, kv_indices, kv_last_page_len = convert_page_table(block_table, seqlens_k, page_size, device)
+        # # 这里构造了一个最简单情况，所有请求有 kv_len/page_size 个 page，page 索引按序递增。
+        # kv_indptr = (
+        #     torch.arange(0, batch_size + 1, device="cuda:0", dtype=torch.int32)
+        #     * num_pages_per_seq
+        # )
+        # kv_indices = torch.arange(0, total_num_pages, device="cuda:0", dtype=torch.int32)
+        # kv_last_page_len = torch.full(
+        #     (batch_size,), (kv_len - 1) % page_size + 1, dtype=torch.int32, device="cuda:0"
+        # )
+    except torch.OutOfMemoryError:
+        pytest.skip("OOM")
     
     scheduler_metadata = get_scheduler_metadata(
         batch_size, 1, kv_len, num_qo_heads, num_kv_heads, head_dim,
-        seqlens_k, q_dtype, headdim_v=head_dim, page_size=page_size, causal=False
+        seqlens_k, q_dtype, headdim_v=head_dim, page_size=page_size, causal=True
     )
+    print(f"{q_fa.shape=} {k_cache_paged.shape=} {block_table.shape=}")
     def run_fa3():
         o_fa_ = flash_attn_with_kvcache(
             q_fa,
@@ -147,6 +149,7 @@ def test_batch_decode_with_paged_kv_cache(
             # block_table=block_table,
             page_table=block_table, # fa3 change to page_table
             # causal=causal,
+            causal=True,
             # window_size=window_size,
             # rotary_interleaved=rotary_interleaved,
             # alibi_slopes=alibi_slopes,
@@ -203,6 +206,6 @@ if __name__=="__main__":
         q_dtype=torch.float16,
         kv_dtype=torch.float16,
         no_rand=False,
-        use_tensor_cores=False,
+        use_tensor_cores=True,
         run_bench=False
     )
