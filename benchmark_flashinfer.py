@@ -21,11 +21,11 @@ def generate_block_kvcache(seqlen_k, page_size, batch_size, nheads_k, head_dim, 
     num_blocks = math.ceil(seqlen_k / page_size) * batch_size
     # kv_data
     k_cache_paged = torch.randn(
-        num_blocks, page_size, nheads_k, head_dim, device=device, dtype=dtype
-    )
+        num_blocks, page_size, nheads_k, head_dim, device=device
+    ).to(dtype)
     v_cache_paged = torch.randn(
-        num_blocks, page_size, nheads_k, head_dim, device=device, dtype=dtype
-    )
+        num_blocks, page_size, nheads_k, head_dim, device=device
+    ).to(dtype)
 
     nblocks_per_batch = num_blocks // batch_size
     if no_rand:
@@ -63,12 +63,11 @@ def convert_page_table(block_table, seqlens_k, page_size, device):
 
     return kv_indptr, kv_indices, kv_last_page_len
 
-'''
-fa3 不支持 Float8_e4m3fn
-'''
 # @pytest.mark.parametrize("kv_len", [128, 2000, 4000, 32000])
+# @pytest.mark.parametrize("batch_size", [16])
+# @pytest.mark.parametrize("num_kv_heads", [32])
+# @pytest.mark.parametrize("num_qo_heads", [32])
 @pytest.mark.parametrize("kv_len", [1024, 2048, 4096, 8192, 16384])
-# @pytest.mark.parametrize("batch_size", [1, 20, 70, 140, 500])
 @pytest.mark.parametrize("batch_size", [128])
 @pytest.mark.parametrize("num_kv_heads", [16])
 @pytest.mark.parametrize("num_qo_heads", [128])
@@ -99,7 +98,7 @@ def test_batch_decode_with_paged_kv_cache(
     torch.manual_seed(42)
     
     try:
-        q = torch.randn(batch_size, num_qo_heads, head_dim, device=device, dtype=q_dtype)
+        q = torch.randn(batch_size, num_qo_heads, head_dim, device=device).to(q_dtype)
         q_fa = torch.unsqueeze(q, dim=1)
         
         num_pages_per_seq = (kv_len + page_size - 1) // page_size
@@ -181,6 +180,10 @@ def test_batch_decode_with_paged_kv_cache(
         return o
     o = run_flashinfer()
     
+    if q_dtype in [torch.bfloat16, torch.float8_e4m3fn, torch.float8_e5m2]:
+        print(f"Convert q:{q_dtype} to float32 for comparison using torch")
+        o = o.to(torch.float32)
+        o_fa = o_fa.to(torch.float32)
     # np.savetxt('o_fa.txt', o_fa.cpu().flatten().numpy(), fmt='%.6f')
     # np.savetxt('o.txt', o.cpu().flatten().numpy(), fmt='%.6f')
     
@@ -196,16 +199,17 @@ def test_batch_decode_with_paged_kv_cache(
 if __name__=="__main__":
     test_batch_decode_with_paged_kv_cache(
         batch_size=16,
-        # kv_len=54,
         kv_len=32000,
-        # page_size=1,
         page_size=8,
         num_kv_heads=4,
         num_qo_heads=32,
         head_dim=128,
         q_dtype=torch.float16,
         kv_dtype=torch.float16,
+        # q_dtype=torch.float8_e4m3fn,
+        # kv_dtype=torch.float8_e4m3fn,
         no_rand=False,
         use_tensor_cores=True,
-        run_bench=False
+        # use_tensor_cores=False,
+        run_bench=True
     )
